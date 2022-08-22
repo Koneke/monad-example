@@ -105,10 +105,13 @@ console.log(y);
 // (which might not work in some languages, if we use U as briefly mentioned above.
 //  but as long as we're working on some same type T, it should work)
 
-const y2 = [square, double].reduce(
-  (loggedX, fn) => bindLogged(loggedX, fn),
-  returnLogged(5)
-);
+const y2 = [square, double] // <- list of the stuff we want to do
+  .reduce(
+    // applying our functions one at a time in a chain
+    (loggedX, fn) => bindLogged(loggedX, fn),
+    // initialise our value by wrapping it, moving it from naked-land into monad-land
+    returnLogged(5)
+  );
 
 console.log(y2);
 // > undefined
