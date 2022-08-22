@@ -15,6 +15,17 @@
 			 which takes a Wrapped<T> and a function T => Wrapped<T>,
 			 and returns a Wrapped<T>
 			 (strictly speaking, that function is T => Wrapped<U>, but that's for another day)
+
+	bind is going to "unwrap" our wrapped value, and run the monad-specific logic with the
+	unwrapped value, such as handling logs, possible undefined values, or whatever
+	else the monad might be for.
+
+	since that is handled in our bind function, the functions we pass it don't need to worry
+	about that part at all, letting us write simpler code, where we don't have to
+	repeat ourselves as much!
+
+	and since we don't need to repeat ourselves,
+	it ends up being easier to read, to refactor, and to understand :)
 */
 
 // Let's do some examples!

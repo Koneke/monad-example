@@ -91,7 +91,9 @@ const returnMaybe = (value) => value;
 // a function that operates on a normal value,
 // and does our magic "encapsulated logic"
 // finally returning a wrapped value (a Maybe<T>)
-const bindMaybe = (wrapped, fn) => wrapped !== undefined ? fn(wrapped) : undefined;
+const bindMaybe = (wrapped, fn) => wrapped !== undefined
+    ? fn(wrapped) // if we have a defined value, business as usual!
+    : undefined; // otherwise, short-circuit to undefined without running fn
 // then, some functions working with Maybe
 /*
     this might look a bit funky,
@@ -105,7 +107,7 @@ const divide = (divisor) => (x) => divisor !== 0
     ? x / divisor // <- our ordinary case
     : undefined; // <- our case where we need to return undefined
 // just a filler function, do some random operation on x
-// (but note how it's just x, not x | undefined! :))
+// (but note how it's just x: number, not number | undefined! :))
 const whatever = (x) => x + 42;
 // we can then do something like this
 const z = bindMaybe(bindMaybe(returnMaybe(10), divide(0)), whatever);
@@ -133,31 +135,17 @@ console.log(z2);
     (which is how function languages without side-effects
     can still do IO, entirely without state!)
 
-    I haven't shown it above (maybe I should have),
+    I haven't shown it above (maybe I should have but I'm tired),
     but a big part of it too is that we don't have to use these monads
-    one at a time, nothing is stopping us from doing something like:
+    one at a time. nothing is stopping is from using a combination of
+    both Logged and Maybe at the same time,
+    logging a series of operations done to a value, where any operation
+    might return undefined, but none of them actually have to handle undefined.
+
+    it's essentially a way to *compose functionality*!
+
+    there's probably a lot of other ways to explain this,
+    and a lot better ways to present this,
+    but hopefully this was at least some degree of useful :)
 
 */
-const loggedMaybeSquare = (x) => ({
-    value: bindMaybe(x, (x) => x * x),
-    logs: [`squared ${x}`],
-});
-const maybeLoggedSquare = (x) => bindLogged(x, square);
-// ({
-//   value: bindMaybe(x, (x) => x * x),
-//   logs: [`squared ${x}`],
-// });
-const loggedMaybeDivision = (divisor) => (x) => ({
-    value: bindMaybe(x, divide(divisor)),
-    logs: [divisor !== 0 ? `divided by ${x}` : `divided by 0!! wtf!!`],
-});
-const maybeLoggedDivision = (divisor) => (x) => divisor !== 0
-    ? bindLogged(x, x => ({
-        value: x / divisor,
-        logs: [`divided by ${x}`],
-    }))
-    : undefined;
-const w = bindLogged(bindLogged(returnLogged(returnMaybe(10)), loggedMaybeDivision(0)), loggedMaybeSquare);
-console.log(w);
-const u = bindMaybe(bindMaybe(returnLogged(10), maybeLoggedDivision(0)), maybeLoggedSquare);
-console.log(u);
