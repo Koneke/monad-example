@@ -156,7 +156,7 @@ const divide: (divisor: number) => (x: number) => Maybe<number> =
       : undefined; // <- our case where we need to return undefined
 
 // just a filler function, do some random operation on x
-// (but note how it's just x, not x | undefined! :))
+// (but note how it's just x: number, not number | undefined! :))
 const whatever: (x: number) => Maybe<number> = (x) => x + 42;
 
 // we can then do something like this
