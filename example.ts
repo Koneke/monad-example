@@ -135,7 +135,9 @@ const bindMaybe: <T>(
   wrapped: Maybe<T>,
   fn: (value: T) => Maybe<T>
 ) => Maybe<T> = (wrapped, fn) =>
-  wrapped !== undefined ? fn(wrapped) : undefined;
+  wrapped !== undefined
+    ? fn(wrapped) // if we have a defined value, business as usual!
+    : undefined; // otherwise, short-circuit to undefined without running fn
 
 // then, some functions working with Maybe
 
@@ -181,3 +183,30 @@ const z2 = [divide(0), whatever].reduce(
 console.log(z2);
 // > undefined
 // as expected :)
+
+// ============================================================================
+
+/*
+
+	at the end of the day, monads are really just a way of extending
+	our everyday types, with a bit of extra functionality.
+
+	that functionality could be handling logging, undefined values,
+	or even encapsulating every single piece of input/output we've done
+	(which is how function languages without side-effects
+	can still do IO, entirely without state!)
+
+	I haven't shown it above (maybe I should have but I'm tired),
+	but a big part of it too is that we don't have to use these monads
+	one at a time. nothing is stopping is from using a combination of
+	both Logged and Maybe at the same time,
+	logging a series of operations done to a value, where any operation
+	might return undefined, but none of them actually have to handle undefined.
+
+	it's essentially a way to *compose functionality*!
+
+	there's probably a lot of other ways to explain this,
+	and a lot better ways to present this,
+	but hopefully this was at least some degree of useful :)
+
+*/
