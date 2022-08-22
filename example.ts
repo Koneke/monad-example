@@ -10,13 +10,11 @@
 		1. a wrapping type, generally some kind of generic<T>
 		   let's call it Wrapped<T>
 		2. a function called return
-		   which creates an instance of that wrapping type, Wrapped<T>,
-			 from a "naked" T
+		   which creates an instance of that wrapping type, Wrapped<T> from a "naked" T
 		3. and a function called bind,
 			 which takes a Wrapped<T> and a function T => Wrapped<T>,
 			 and returns a Wrapped<T>
-			 (strictly speaking, that function is T => Wrapped<U>,
-				but that's for another day)
+			 (strictly speaking, that function is T => Wrapped<U>, but that's for another day)
 */
 
 // Let's do some examples!
@@ -47,7 +45,7 @@ const returnLogged: <T>(value: T) => Logged<T> = (value) => ({
 	and a function fn:
 		that operates on an entirely normal value T,
 		returns what any old normal function would,
-		and also the log of what has happened to the value.
+		but ALSO the log of what has happened to the value.
 
 	then, our bind function applied that function fn,
 	to the value "inside" the Logged<T>,
